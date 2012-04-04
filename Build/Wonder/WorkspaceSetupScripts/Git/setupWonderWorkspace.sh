@@ -13,6 +13,13 @@ elif [ "$WO_VERSION" == "5.4.3" ]; then
 	WO_ALT_VERSION="54"
 fi
 
+echo "WOnder Version: ${WONDER_BRANCH}"
+if [ "$WONDER_BRANCH" == "" ]; then
+        echo "You must provide a Git Reference for Wonder."
+        exit 1
+fi
+WONDER_GIT_REFERENCE = "$WONDER_BRANCH"
+
 #
 # Configure the environment based on the platform information.
 #
@@ -77,11 +84,11 @@ WO_SYSTEM_ROOT_FOR_THIS_BUILD="${ROOT}${SYSTEM_PATH_PREFIX}"
 # of directly to the Frameworks directories as that will allow us to
 # setup the workspace with just two symlinks instead of needing one for
 # every Framework as is done in the setupWonderProjectWorkspace.sh script.
-							   WONDER_SUB_PATH="${WONDER_BRANCH}"
-	  WEBOBJECTS_ROOT_IN_FRAMEWORKS_REPOSITORY="${FRAMEWORKS_REPOSITORY}/WebObjects/${WO_VERSION}${SYSTEM_PATH_PREFIX}"
-   WEBOBJECTS_LIBRARY_IN_FRAMEWORKS_REPOSITORY="${WEBOBJECTS_ROOT_IN_FRAMEWORKS_REPOSITORY}/Library"
-		  WONDER_ROOT_IN_FRAMEWORKS_REPOSITORY="${FRAMEWORKS_REPOSITORY}/ProjectWOnder/${WONDER_GIT_REFERENCE}/${WO_VERSION}"
-	   WONDER_LIBRARY_IN_FRAMEWORKS_REPOSITORY="${WONDER_ROOT_IN_FRAMEWORKS_REPOSITORY}/Library"
+WONDER_SUB_PATH="${WONDER_BRANCH}"
+WEBOBJECTS_ROOT_IN_FRAMEWORKS_REPOSITORY="${FRAMEWORKS_REPOSITORY}/WebObjects/${WO_VERSION}${SYSTEM_PATH_PREFIX}"
+WEBOBJECTS_LIBRARY_IN_FRAMEWORKS_REPOSITORY="${WEBOBJECTS_ROOT_IN_FRAMEWORKS_REPOSITORY}/Library"
+WONDER_ROOT_IN_FRAMEWORKS_REPOSITORY="${FRAMEWORKS_REPOSITORY}/ProjectWOnder/${WONDER_GIT_REFERENCE}/${WO_VERSION}"
+WONDER_LIBRARY_IN_FRAMEWORKS_REPOSITORY="${WONDER_ROOT_IN_FRAMEWORKS_REPOSITORY}/Library"
 
 # Make sure the Workspace Libraries folder exists
 mkdir -p ${WORKSPACE}/Libraries

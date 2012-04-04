@@ -18,7 +18,7 @@ if [ "$WONDER_BRANCH" == "" ]; then
         echo "You must provide a Git Reference for Wonder."
         exit 1
 fi
-WONDER_GIT_REFERENCE = "$WONDER_BRANCH"
+WONDER_GIT_REFERENCE="$WONDER_BRANCH"
 
 #
 # Configure the environment based on the platform information.

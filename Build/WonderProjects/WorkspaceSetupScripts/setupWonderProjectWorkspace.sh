@@ -179,6 +179,8 @@ for PROJECT in $PROJECTS; do
 			FRAMEWORK_NAME_IN_WONDER_INSTALL="${WONDER_FRAMEWORKS_IN_FRAMEWORKS_REPOSITORY}/${FRAMEWORK}.framework"
 			JENKINS_FRAMEWORK_JOB_DIST="${JOB_ROOT}/jobs/${FRAMEWORK}${BRANCH_TAG_DELIMITER}${PROJECT_BRANCH_TAG}/lastSuccessful/archive/Projects/${FRAMEWORK}/dist"
                         FRAMEWORK_ARTIFACT_PATH_IN_JENKINS_JOB="${JENKINS_FRAMEWORK_JOB_DIST}/${FRAMEWORK}.framework"
+			JENKINS_FRAMEWORK_JOB_DIST2="${JOB_ROOT}/${FRAMEWORK}${BRANCH_TAG_DELIMITER}${PROJECT_BRANCH_TAG}/lastSuccessful/archive/Projects/${FRAMEWORK}/dist"
+                        FRAMEWORK_ARTIFACT_PATH_IN_JENKINS_JOB2="${JENKINS_FRAMEWORK_JOB_DIST2}/${FRAMEWORK}.framework"
 
 			# Check to see if the Framework is being built as
 			# part of this job. Of course, this job will need
@@ -251,6 +253,32 @@ for PROJECT in $PROJECTS; do
 					FRAMEWORK_LINK_SUCCESSFUL="true"
 				else
 					echo "    Not found in other build job: ${FRAMEWORK_ARTIFACT_PATH_IN_JENKINS_JOB}"
+				fi
+
+				# NOTE. For alternative workspace location this code branch:
+				# Check to see if the Framework is a Jenkins-Built framework
+				# by checking for it in the Jobs directory for properly
+				# named Hudson jobs. NOTE: We may create and/or build our
+				# own version of a Wonder or System framework, so we need to
+				# check for that last too, so this Can't be an elseif, it
+				# must be an if.
+				if [ -e "${FRAMEWORK_ARTIFACT_PATH_IN_JENKINS_JOB2}" ]; then
+					echo "    Found in Jenkins Job: ${JENKINS_URL}job/${FRAMEWORK}/lastSuccessfulBuild/artifact/Projects/${FRAMEWORK}/dist"
+					echo "        ${FRAMEWORK_ARTIFACT_PATH_IN_JENKINS_JOB2}"
+					if [ -e "${JENKINS_FRAMEWORK_JOB_DIST2}/${FRAMEWORK}.framework" ]; then
+						echo "    ${FRAMEWORK}.tar.gz has already been extracted."
+					else
+						echo "    ${FRAMEWORK}.tar.gz has not been extracted. Extracting now."
+						echo "        tar -C ${JENKINS_FRAMEWORK_JOB_DIST2}"
+						echo "            -xf ${FRAMEWORK_ARTIFACT_PATH_IN_JENKINS_JOB2}"
+						tar -C ${JENKINS_FRAMEWORK_JOB_DIST2} -xf ${FRAMEWORK_ARTIFACT_PATH_IN_JENKINS_JOB2}
+					fi
+					echo "        Linking: ln -sfn ${JENKINS_FRAMEWORK_JOB_DIST2}/${FRAMEWORK}.framework"
+					echo "                         ${WO_LOCAL_FRAMEWORKS_FOR_THIS_BUILD}"
+					(ln -sfn ${JENKINS_FRAMEWORK_JOB_DIST2}/${FRAMEWORK}.framework ${WO_LOCAL_FRAMEWORKS_FOR_THIS_BUILD})
+					FRAMEWORK_LINK_SUCCESSFUL="true"
+				else
+					echo "    Not found in other build job: ${FRAMEWORK_ARTIFACT_PATH_IN_JENKINS_JOB2}"
 				fi
 			fi
 
